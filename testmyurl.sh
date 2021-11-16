@@ -1,10 +1,10 @@
 #!/bin/bash
-
 if [ "$#" -ne 1 ]; then
 
-    echo "Please Pass a Single File with a list of URLs seperated with new lines" 1>&2; # Message goes to stderr
+    echo "Please Pass a Single File with a list of URLs seperated with new lines, and add an empty last line" 1>&2; # Message goes to stderr
 
     exit 1
+
 fi
 
 num_of_not_working_sites=0
@@ -17,7 +17,7 @@ do
 
     if [[ "$urlstatus" -eq 200 ]]; then
 
-    MSG="$single_url - Site is Working - Status Code: $urlstatus"
+    MSG="$single_url - Site is Working - Status Code: $urlstatus - Time : $(date)"
 
     if test -f urls-working.txt; then
 
@@ -35,7 +35,7 @@ do
 
     else
 
-    MSG="$single_url - Site not Working - Status Code: $urlstatus"
+    MSG="$single_url - Site not Working - Status Code: $urlstatus - Time : $(date)"
 
     ((num_of_not_working_sites=num_of_not_working_sites+1))
 
