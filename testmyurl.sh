@@ -7,6 +7,8 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
+num_of_not_working_sites=0
+
 while read single_url
 
 do
@@ -17,7 +19,15 @@ do
 
     MSG="$single_url - Site is Working - Status Code: $urlstatus"
 
+    if test -f urls-working.txt; then
+
+    grep -qxF $single_url urls-working.txt || echo $single_url >> urls-working.txt
+
+    else 
+
     echo $single_url >> urls-working.txt
+
+    fi
 
     echo $MSG
 
@@ -27,6 +37,8 @@ do
 
     MSG="$single_url - Site not Working - Status Code: $urlstatus"
 
+    ((num_of_not_working_sites=num_of_not_working_sites+1))
+
     echo $MSG
 
     echo $MSG >> urlstatus.txt
@@ -34,5 +46,11 @@ do
     fi
 
 done < $1
+
+if [[ $num_of_not_working_sites -eq 0 ]]; then
+
+    exit 0
+
+fi
 
 exit 1
